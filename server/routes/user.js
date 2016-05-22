@@ -26,6 +26,7 @@ router.post('/login', (req, res) => {
         callback => {
            User
                .findOne({ email })
+               .select('+password')
                .exec()
                .then(
                    user => user 
@@ -54,13 +55,36 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    User
-        .find()
-        .exec()
-        .then(
-            users => res.json(users),
-            error => res.json(error)
-        )
+    let { search } = req.query;
+    search = search.toLowerCase().split(' ');
+
+    async.waterfall([
+        callback => {
+            User
+                .find()
+                .exec()
+                .then(
+                    users => callback(null, users),
+                    error => res.json(error, null)
+                )
+        },
+
+        (callback) => {
+            callback(null, users.filter(user => {
+                let firstname = user.firstname.toLowerCase(),
+                    lastname = user.lastname.toLowerCase();
+                return firstname.indexOf(search[0]) == 0
+                    || firstname.indexOf(search[1]) == 0
+                    || lastname.indexOf(search[0]) == 0
+                    || lastname.indexOf(search[1]) == 0
+            }))
+        }
+    ], (error, users) => {
+        if (error)
+            return res.end(res.writeHead(401, error));
+        res.json(users.sort((a, b) => a.fullname.localeCompare(b.fullname)));
+    })
+
 });
 
 router.post('/', (req, res) => {

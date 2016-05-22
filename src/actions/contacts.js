@@ -1,33 +1,4 @@
-import { normalize, Schema, arrayOf } from 'normalizr'
-
-export const SEARCH_CONTACT = 'SEARCH_CONTACT';
-export const LOAD_CONTACTS_SUCCESS = 'LOAD_CONTACTS_SUCCESS';
-export const LOAD_CONTACTS_FAILURE = 'LOAD_CONTACT_FAILURE';
-
-export function searchContact(searchString) {
-    return {
-        type: SEARCH_CONTACT,
-        searchString
-    }
-}
-
-export function loadContacts(userID) {
-    return dispatch => fetch(`/users/${userID}/contacts`)
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-
-            const user = new Schema('user');
-            user.define({
-                   
-            });
-
-            normalize(response );
-
-            dispatch(loadContactsSuccess(response))
-        })
-        .catch(error => dispatch(loadContactsFailure(error)))
-}
+export const LOAD_CONTACTS_SUCCESS = "LOAD_CONTACTS_SUCCESS";
 
 export function loadContactsSuccess(contacts) {
     return {
@@ -35,37 +6,34 @@ export function loadContactsSuccess(contacts) {
         contacts
     }
 }
-export function loadContactsFailure(error) {
+
+export const LOAD_SEARCH_CONTACTS_SUCCESS = "LOAD_SEARCH_CONTACTS_SUCCESS";
+export const LOAD_SEARCH_CONTACTS_FAIL = "LOAD_SEARCH_CONTACTS_FAIL";
+
+export function loadSearchContactsSuccess(contacts) {
     return {
-        type: LOAD_CONTACTS_FAILURE,
-        error
+        type: LOAD_SEARCH_CONTACTS_SUCCESS,
+        contacts
     }
 }
 
-const LOAD_USERS_SUCCESS = "LOAD_USERS_SUCCESS";
-const LOAD_USERS_FAILURE = "LOAD_USERS_FAILURE";
-
-export function loadUsers() {
-    return dispatch => fetch(`/users`)
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            dispatch(loadUsersSuccess(response))
-        })
-        .catch(error => dispatch(loadUsersFailure(error)))
+export function loadSearchContactsFail(error) {
+    return {
+        type: LOAD_SEARCH_CONTACTS_FAIL
+    }
 }
 
-export function loadUsersSuccess(users) {
-    return {
-        type: LOAD_CONTACTS_SUCCESS,
-        users
-    }
+export function loadSearchContacts(searchString) {
 
-}
-
-export function loadUsersFailure(error) {
-    return {
-        type: LOAD_CONTACTS_FAILURE,
-        error
-    }
+    return searchString.trim().length != 0
+        ? dispatch =>
+            fetch(`/users?search=${searchString}`)
+                .then(response => response.json())
+                .then(contacts => dispatch(loadSearchContactsSuccess(contacts)))
+                .catch(error => dispatch(loadSearchContactsFail(error)))
+        : dispatch =>
+        fetch(`/users`)
+            .then(response => response.json())
+            .then(contacts => dispatch(loadContactsSuccess(contacts)))
+            .catch(error => console.log(error))
 }

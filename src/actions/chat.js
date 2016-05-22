@@ -1,7 +1,6 @@
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
 
 export function sendMessage(text, chatID, authorID) {
-    console.log(text, chatID, authorID);
     return dispatch => {
         socket.emit('save chat message', {
             text,

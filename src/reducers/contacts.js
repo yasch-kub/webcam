@@ -1,37 +1,24 @@
 import {
-    SEARCH_CONTACT,
-    LOAD_CONTACTS_SUCCESS
+    LOAD_CONTACTS_SUCCESS,
+    LOAD_SEARCH_CONTACTS_SUCCESS
 } from '../actions/contacts';
 
 const initialState = {
-    selected: [],
-    favourites: [],
-    other: []
+    contacts: []
 };
 
 export default function (state = initialState, action) {
-    switch (action.type) {
-        case SEARCH_CONTACT:
-            let selected = [],
-                searchString = action.searchString.toLowerCase();
-            for (let key in initialState)
-                if (!isNaN(parseInt(key))) {
-                    let fullname = `${initialState[key].firstname} ${initialState[key].lastname}`.toLowerCase();
-
-                    if (fullname.indexOf(searchString) == 0)
-                        selected.push(parseInt(key));
-                }
-            return ({
-                ...state,
-                selected
-            });
-
+    switch(action.type) {
         case LOAD_CONTACTS_SUCCESS:
             return {
                 ...state,
-                ...action.users
+                contacts: []
             };
-
+        case LOAD_SEARCH_CONTACTS_SUCCESS:
+            return {
+                ...state,
+                contacts: action.contacts
+            };
         default:
             return state;
     }
