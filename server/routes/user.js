@@ -28,19 +28,19 @@ router.post('/login', (req, res) => {
         callback => {
         console.log('step 1');
                 User
-                   .findOne({ email })
-                   .select('+password')
-                   .exec()
-                   .then(
+                    .findOne({ email })
+                    .select("+password")
+                    .populate('contacts')
+                    .exec()
+                    .then(
                        user => user
                            ? callback(null, user)
                            : callback('No user find with current email', null),
                        error => callback(error, null)
-                   )
+                    )
         },
 
         (user, callback) => {
-            console.log('step 2');
             user
                 .comparePassword(password, callback)
                 .then(
@@ -49,48 +49,18 @@ router.post('/login', (req, res) => {
                 .catch(
                     error => callback(error, null)
                 )
-        },
-
-        (user, callback) => {
-            console.log('step 3');
-            Chat
-                .find()
-                .select('id users')
-                .exec()
-                .then(
-                    chats => callback(null, chats, user),
-                    error => callback(error, null)
-                )
-        },
-
-        (chats, user, callback) => {
-            console.log('step 4');
-            let chatsID = [];
-            user.contacts.forEach((contact, i) => {
-
-                let chat = chats.find(chat => chat.users.length == 2
-                    && chat.users.indexOf(contact.id) != -1
-                    && chat.users.indexOf(user.id) != -1);
-                
-                chatsID[i] = chat ? chat.id : 0;
-            });
-            callback(null, user, chatsID)
         }
-    ], (error, user, chatsID) => {
+
+    ], (error, user) => {
         if (error)
             return res.status(403).json(error);
-        res.status(200).json({
-            user,
-            chatsID
-        });
+        res.status(200).json(user);
     });
 });
 
 router.get('/', (req, res) => {
     let { search } = req.query;
     search = search.toLowerCase().split(' ');
-
-    console.log("search");
 
     async.waterfall([
         callback => User
@@ -248,4 +218,14 @@ router.post('/:id/contacts', (req, res) => {
     })
 });
 
-module.exports = router;
+module.exports.findUserById = function(id, callback) {
+    User
+        .findByID(ObjectId(id))
+        .exec()
+        .then(
+            user => callback(user),
+            error => console.log(error)
+        );
+};
+
+module.exports.routes = router;

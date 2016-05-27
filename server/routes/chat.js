@@ -188,8 +188,6 @@ function addUserToChat(chatID, userID, callback) {
     })
 };
 
-module.exports.findUser = function(userID, callback) {
 
-};
 
 module.exports.routes = router;

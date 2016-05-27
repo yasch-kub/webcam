@@ -1,7 +1,9 @@
 const chat = require('../routes/chat');
+const uuid = require('node-uuid');
 
 module.exports = function(io) {
     io.on('connection', socket => {
+        
 
         socket.on('chat message send', message => {
             var {

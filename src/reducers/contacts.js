@@ -15,14 +15,9 @@ export default function (state = initialState, action) {
     switch(action.type) {
 
         case LOAD_CONTACTS_SUCCESS:
-            let { contacts, chatsID} = action.contacts;
-
-            contacts.forEach((contact, i) => contacts[i].chatID = chatsID[i]);
-            console.log("contacts", contacts);
-
             return {
                 ...state,
-                contacts
+                contacts: action.contacts
             };
 
         case LOAD_SEARCH_CONTACTS_SUCCESS:

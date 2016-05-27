@@ -8,7 +8,7 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/user').routes;
 const chatRoutes = require('./routes/chat').routes;
 
 mongoose.connect(`mongodb://${db.user}:${db.password}@${db.host}:${db.port}/${db.name}`);
@@ -35,7 +35,7 @@ app.use('/chats', chatRoutes);
 /**
  * Socket events
  */
-require('./sockets/chat')(io);
+require('./sockets/user')(io);
 
 server.listen(app.get('port'), 'localhost', () => {
     console.log(`Server run on ${app.get('port')}`);

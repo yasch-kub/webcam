@@ -77,8 +77,8 @@ export function login(email, password) {
             .then(
                 response => setTimeout(
                     () => {
-                        dispatch(loginSuccess(response.user));
-                        dispatch(loadContactsSuccess(response));
+                        dispatch(loginSuccess(response));
+                        dispatch(loadContactsSuccess(response.contacts));
                         browserHistory.push('/app');
                     }, 2000)
             )
