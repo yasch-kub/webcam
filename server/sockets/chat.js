@@ -1,10 +1,7 @@
 const chat = require('../routes/chat');
-const uuid = require('node-uuid');
 
 module.exports = function(io) {
     io.on('connection', socket => {
-        
-
         socket.on('chat message send', message => {
             var {
                 text,
@@ -13,8 +10,10 @@ module.exports = function(io) {
             } = message;
 
             chat.saveMessage(text, chatID, authorID, (error, message) => {
+                console.log(error);
                 if (error)
                     throw new Error(error);
+                console.log('dfsdf');
                 io.sockets.emit('chat message added', {
                     text,
                     authorID,
@@ -22,6 +21,6 @@ module.exports = function(io) {
                 });
             })
         });
-        
+
     });
 };

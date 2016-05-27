@@ -35,7 +35,7 @@ app.use('/chats', chatRoutes);
 /**
  * Socket events
  */
-require('./sockets/user')(io);
+require('./sockets/chat')(io);
 
 server.listen(app.get('port'), 'localhost', () => {
     console.log(`Server run on ${app.get('port')}`);

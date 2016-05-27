@@ -5,7 +5,7 @@ import {
 } from '../actions/chat'
 
 const initialState = {
-    id: "571768b7201b86900c268e92",
+    id: "57481ab2ec1485f013d07248",
     messages: [],
     users: [
         {
@@ -19,6 +19,12 @@ const initialState = {
             firstname: 'Sergiy',
             lastname: 'Krasnikov',
             avatar: 'dist/images/Avatar2.png'
+        },
+        {
+            id: '57175febb88c099c0a86bef0',
+            firstname: 'Denis',
+            lastname: 'Kublitskiy',
+            avatar: 'dist/images/Avatar1.png'
         }
     ]
 };

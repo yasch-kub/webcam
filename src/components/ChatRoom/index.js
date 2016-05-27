@@ -11,6 +11,7 @@ import {
 
 import { Paper } from 'material-ui'
 import io from 'socket.io-client'
+const socket = io('localhost:3333');
 
 import ChatMessageForm from '../ChatMessageForm'
 import ChatMessagesList from '../ChatMessagesList'
@@ -65,7 +66,7 @@ export default class ChatRoom extends React.Component {
         marginTop: 15,
         backgroundColor: 'rgba(255, 255, 255, 1)'
     };
-    
+
     handleSendMessage(text) {
         socket.emit('chat message send', {
             text,
@@ -73,7 +74,7 @@ export default class ChatRoom extends React.Component {
             authorID: this.props.user.id
         })
     }
-    
+
     componentWillMount() {
         this.props.loadMessages(this.props.chatID);
     }
@@ -83,7 +84,7 @@ export default class ChatRoom extends React.Component {
     }
 
     componentDidMount() {
-        //socket.on("chat message added", this.props.receiveMessage);
+        socket.on("chat message added", this.props.receiveMessage);
     }
 
     render() {
