@@ -34,8 +34,9 @@ const UserSchema = new mongoose.Schema({
     },
 
     contacts: [{
-       ref: 'User',
-       type: mongoose.Schema.Types.ObjectId
+        ref: 'User',
+        type: mongoose.Schema.Types.ObjectId,
+        unique: true
     }]
 
 });
@@ -75,7 +76,7 @@ const SALT_WORK_FACTOR = 10;
 /**
  * Password hashing
  */
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function(next) {    
     if (!this.isModified('password'))
         return next();
 

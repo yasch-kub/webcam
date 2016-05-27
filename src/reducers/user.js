@@ -8,12 +8,16 @@ import {
 } from '../actions/user';
 
 const initialState = {
-    firstname: null,
-    lastname: null,
-    avatar: null,
-    id: null,
-    isFetching: false,
-    error: null
+    firstname:"Denis",
+    lastname:"Kublitskiy",
+    avatar:"dist/images/Avatar1.png",
+    id:"57175febb88c099c0a86bef0",
+    isFetching:false,
+    error:null,
+    _id:"57175febb88c099c0a86bef0",
+    email:"deniskublitskiy@gmail.com",
+    password:"$2a$10$merhPK3IpkUmInzEu.9VU.XXWH2TZMTYuXcXsvwB9C2SiqTBn9rGC",
+    __v:0
 };
 
 export default function (state = initialState, action) {

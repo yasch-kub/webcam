@@ -1,5 +1,7 @@
 import {
-    RECEIVE_CHAT_MESSAGE
+    RECEIVE_CHAT_MESSAGE,
+    LOAD_CHAT_MESSAGES_SUCCESS,
+    OPEN_CHAT
 } from '../actions/chat'
 
 const initialState = {
@@ -27,7 +29,7 @@ export default function (state = initialState, action) {
             let messages = state.messages.slice();
             messages.push({
                 text: action.message.text,
-                authorID: action.message.authorID,
+                author: action.message.authorID,
                 date: action.message.date
             });
 
@@ -35,6 +37,19 @@ export default function (state = initialState, action) {
                 ...state,
                 messages
             };
+
+        case LOAD_CHAT_MESSAGES_SUCCESS:
+            return {
+                ...state,
+                messages: action.messages
+            };
+
+        case OPEN_CHAT:
+            return {
+                ...state,
+                id: action.chatID
+            };
+
         default:
             return state;
     }

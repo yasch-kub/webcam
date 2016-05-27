@@ -62,7 +62,10 @@ export default class ChatRoom extends React.Component {
 
     style = {
         padding: 15,
-        display: 'inline-block'
+        display: 'inline-block',
+        marginLeft: 355,
+        marginTop: 15,
+        backgroundColor: 'rgba(255, 255, 255, 1)'
     };
     
     handleSendMessage(text) {
@@ -72,6 +75,14 @@ export default class ChatRoom extends React.Component {
             authorID: this.props.user.id
         })
     }
+    
+    componentWillMount() {
+        this.props.loadMessages(this.props.chatID);
+    }
+
+    componentWillUpdate() {
+        this.props.loadMessages(this.props.chatID);
+    }
 
     componentDidMount() {
         socket.on("chat message added", this.props.receiveMessage);
@@ -79,16 +90,18 @@ export default class ChatRoom extends React.Component {
 
     render() {
         let messages = this.props.messages.map(message => {
-            let author = this.props.users.find(user => user.id === message.authorID);
+            let author = this.props.users.find(user => user.id === message.author);
             author = author || this.props.user;
             return {
                 author: `${author.firstname} ${author.lastname}`,
                 avatar: author.avatar,
-                isLeft: message.authorID === this.props.user.id,
+                isLeft: message.author === this.props.user.id,
                 text: message.text,
                 date: message.date
             }
         });
+
+        console.log('Chat Room: message', messages)
 
         return (
             <Paper

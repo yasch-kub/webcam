@@ -1,7 +1,6 @@
 'use strict';
 
 const bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser'),
     mongoose = require('mongoose'),
     db = require('./config');
 
@@ -22,7 +21,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true

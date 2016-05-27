@@ -70,7 +70,7 @@ router.get('/:id/messages', (req, res) => {
         .select('messages')
         .exec()
         .then(
-            messages => res.json(messages),
+            chat => res.json(chat.messages),
             error => res.send(error)
         );
 });
@@ -98,7 +98,7 @@ module.exports.saveMessage = function saveMessage(text, chatID, userID, callback
         // Save message
         (author, callback) => {
             let message = new Message({
-                message: text,
+                text,
                 author
             });
 

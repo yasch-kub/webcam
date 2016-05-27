@@ -28,6 +28,7 @@ export function loadChatMessages(chatID) {
 }
 
 export function loadChatMessagesSuccess(messages) {
+    console.log('messages', messages)
     return {
         type: LOAD_CHAT_MESSAGES_SUCCESS,
         messages
@@ -40,5 +41,15 @@ export function receiveMessage(message) {
     return {
         type: RECEIVE_CHAT_MESSAGE,
         message
+    }
+}
+
+export const OPEN_CHAT = "OPEN_CHAT"
+
+export function openChat(chatID) {
+    console.log(chatID);
+    return {
+        type: OPEN_CHAT,
+        chatID
     }
 }

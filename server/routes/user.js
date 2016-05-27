@@ -1,11 +1,11 @@
 'use strict';
 
 const express = require('express'),
-    jwt = require('jwt-simple'),
     mongoose = require('mongoose'),
     async = require('async');
 
 const User = require('../models/user');
+const Chat = require('../models/chat');
 
 let router = express.Router();
 
@@ -22,21 +22,25 @@ router.post('/login', (req, res) => {
        password
     } = req.body;
 
+    console.log(email);
+
     async.waterfall([
         callback => {
-           User
-               .findOne({ email })
-               .select('+password')
-               .exec()
-               .then(
-                   user => user 
-                       ? callback(null, user) 
-                       : callback('No user find with current email', null),
-                   error => callback(error, null)
-               )
+        console.log('step 1');
+                User
+                   .findOne({ email })
+                   .select('+password')
+                   .exec()
+                   .then(
+                       user => user
+                           ? callback(null, user)
+                           : callback('No user find with current email', null),
+                       error => callback(error, null)
+                   )
         },
 
         (user, callback) => {
+            console.log('step 2');
             user
                 .comparePassword(password, callback)
                 .then(
@@ -45,12 +49,40 @@ router.post('/login', (req, res) => {
                 .catch(
                     error => callback(error, null)
                 )
+        },
 
+        (user, callback) => {
+            console.log('step 3');
+            Chat
+                .find()
+                .select('id users')
+                .exec()
+                .then(
+                    chats => callback(null, chats, user),
+                    error => callback(error, null)
+                )
+        },
+
+        (chats, user, callback) => {
+            console.log('step 4');
+            let chatsID = [];
+            user.contacts.forEach((contact, i) => {
+
+                let chat = chats.find(chat => chat.users.length == 2
+                    && chat.users.indexOf(contact.id) != -1
+                    && chat.users.indexOf(user.id) != -1);
+                
+                chatsID[i] = chat ? chat.id : 0;
+            });
+            callback(null, user, chatsID)
         }
-    ], (error, user) => {
+    ], (error, user, chatsID) => {
         if (error)
-            return res.end(res.writeHead(401, error));
-        res.status(200).json(user)
+            return res.status(403).json(error);
+        res.status(200).json({
+            user,
+            chatsID
+        });
     });
 });
 
@@ -58,18 +90,19 @@ router.get('/', (req, res) => {
     let { search } = req.query;
     search = search.toLowerCase().split(' ');
 
-    async.waterfall([
-        callback => {
-            User
-                .find()
-                .exec()
-                .then(
-                    users => callback(null, users),
-                    error => res.json(error, null)
-                )
-        },
+    console.log("search");
 
-        (callback) => {
+    async.waterfall([
+        callback => User
+            .find()
+            .exec()
+            .then(
+                users => callback(null, users),
+                error => res.json(error, null)
+            )
+        ,
+
+        (users, callback) => {
             callback(null, users.filter(user => {
                 let firstname = user.firstname.toLowerCase(),
                     lastname = user.lastname.toLowerCase();
@@ -82,9 +115,19 @@ router.get('/', (req, res) => {
     ], (error, users) => {
         if (error)
             return res.end(res.writeHead(401, error));
-        res.json(users.sort((a, b) => a.fullname.localeCompare(b.fullname)));
+        res.json(users);
     })
 
+});
+
+router.get('/:id', (req, res) => {
+    User
+        .findById(ObjectId(req.params.id))
+        .exec()
+        .then(
+            user => res.status(200).json(user),
+            error => res.send(error)
+        )
 });
 
 router.post('/', (req, res) => {
@@ -115,21 +158,94 @@ router.post('/', (req, res) => {
         );
 });
 
+router.delete('/:id/contacts', (req, res) => {
+    async.waterfall([
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .populate('contacts')
+            .select('contacts')
+            .exec()
+            .then(
+                user => callback(null, user),
+                error => callback(error, null)
+            ),
+
+        (user, callback) => {
+            user.contacts = [];
+            user.save((error, user) => {
+                if (error)
+                    return callback(error, null);
+                callback(null, user)
+            })
+        }
+    ], (error, user) => {
+        if (error)
+            res.status(403).json(error);
+        res.status(200).json(user);
+    })
+
+});
+
 router.get('/:id/contacts', (req, res) => {
+    console.log('get contacts');
     User
-        .find(ObjectId(req.params.id))
+        .findById(ObjectId(req.params.id))
         .populate('contacts')
         .select('contacts')
         .exec()
         .then(
-            contacts => res.status(200).json(contacts),
-            error => res.send(error)
-        )
+            user => res.status(200).json(user.contacts),
+            error => res.status(403).json(error)
+        );
 });
 
-// TODO: Add new contact
-router.post(':id/contacts', (req, res) => {
-    
+router.post('/:id/contacts', (req, res) => {
+    let newContactId = req.body.id;
+
+    async.waterfall([
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .exec()
+            .then(
+                user => callback(null, user),
+                error => callback(error, null)
+            ),
+
+        (user, callback) => User
+            .findById(ObjectId(newContactId))
+            .exec()
+            .then(
+                newContact => callback(null, user, newContact),
+                error => callback(error, null)
+            ),
+
+        (user, newContact, callback) => {
+            console.log(user, newContact)
+            if(!user.contacts.find(user => user == newContact.id))
+                user.contacts.push(newContact);
+
+            user.save((error, user) => {
+                if (error)
+                    return callback(error);
+                callback(null)
+            })
+        },
+
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .populate('contacts')
+            .select('contacts')
+            .exec()
+            .then(
+                user => callback(null, user.contacts),
+                error => callback(error, null)
+            )
+
+    ], (error, contacts) => {
+        if (error)
+            return res.status(401).json(error);
+        res.status(200).json(contacts);
+    })
 });
 
 module.exports = router;

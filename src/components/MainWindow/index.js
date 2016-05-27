@@ -5,22 +5,11 @@ import SideBar from '../SideBar'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-@connect(
-    state => ({
-        
-    }),
-    dispatch => ({
-        
-    })
-)
+import VideoConference from '../VideoConference'
+
 export default class MainWindow extends React.Component {
 
-    static defaultProps = {
-        loadContacts: PropTypes.func.isRequired
-    };
-
     style = {
-        padding: 10,
         height: '100%',
         width: '100%'
     };
@@ -29,6 +18,8 @@ export default class MainWindow extends React.Component {
         return (
             <div style = {this.style}>
                 <SideBar />
+                <VideoConference />
+                <ChatRoom />
             </div>
         );
     }

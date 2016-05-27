@@ -23,8 +23,8 @@ export default class ChatMessagesList extends React.Component {
     };
 
     style = {
-        width: 360,
-        height: 300,
+        width: 610,
+        height: 150,
         overflowY: 'scroll',
         marginBottom: 15
     };

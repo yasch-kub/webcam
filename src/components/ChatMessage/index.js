@@ -25,11 +25,12 @@ export default class ChatMessage extends React.Component {
         top: 10
     };
 
-    leftStyle = {
-        textAlign: !this.isLeft ? 'left' : 'right'
-    };
-    
     isLeft = this.props.isLeft;
+
+    leftStyle = {
+        textAlign: this.isLeft ? 'left' : 'right',
+        margin: this.isLeft ? 0 : '0 15px'
+    };
 
     time =
         <p style = {this.timeStyle}>
@@ -39,11 +40,11 @@ export default class ChatMessage extends React.Component {
     avatar = <Avatar src = {this.props.avatar} />;
 
     author =
-        <span style = {this.leftStyle}>
+        <p style = {{...this.leftStyle}}>
             <b>
                 {this.props.author}
             </b>
-        </span>;
+        </p>;
 
     text =
         <p style = {{...this.leftStyle, whiteSpace: 'pre'}}>

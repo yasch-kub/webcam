@@ -1,28 +1,43 @@
 import React, { PropTypes } from 'react'
 
 import {
-    List,
     ListItem,
     Avatar
 } from 'material-ui'
 
-import {pinkA200, transparent} from 'material-ui/styles/colors';
+import {pinkA200, transparent} from 'material-ui/styles/colors'
+
+import ContactMenu from '../ContactMenu'
 
 export default class Contact extends React.Component {
 
-    propTypes = {
+    state = {
+        isMenuOpen: false
+    };
+
+    static propTypes = {
         fullname: PropTypes.string.isRequired,
         avatar: PropTypes.string.isRequired,
         letter: PropTypes.boolean
     };
 
-    defaultProps = {
+    static defaultProps = {
         letter: false
     };
 
     letterStyle = {
         left: 8
     };
+
+    handleRequestClose() {
+        this.setState({
+            isMenuOpen: false
+        })
+    }
+
+    addContact() {
+        this.props.addContact(this.props.id)
+    }
 
     letter =
         <Avatar
@@ -31,14 +46,21 @@ export default class Contact extends React.Component {
             style = {this.letterStyle}
         >
             {this.props.fullname[0].toUpperCase()}
-        </Avatar>
+        </Avatar>;
 
-    avatar = <Avatar src={this.props.avatar} />
+    avatar = <Avatar src={this.props.avatar} />;
+    
+    handleTouchTap(event) {
+        this.props.onClick && this.props.onClick(this.props.chatID);
+        this.setState({
+            isMenuOpen: true,
+            anchorEl: event.currentTarget
+        });
+    }
 
     render() {
-        console.log(this.props.avatar);
         return (
-            <List>
+            <div>
                 <ListItem
                     primaryText={this.props.fullname}
                     rightAvatar={this.avatar}
@@ -46,8 +68,15 @@ export default class Contact extends React.Component {
                     leftAvatar={
                         this.props.letter && this.letter
                     }
+                    onTouchTap={::this.handleTouchTap}
                 />
-            </List>
+                <ContactMenu
+                    open = {this.state.isMenuOpen}
+                    anchorEl = {this.state.anchorEl}
+                    handleRequestClose = {::this.handleRequestClose}
+                    addContact = {::this.addContact}
+                />
+            </div>
         );
     }
 }

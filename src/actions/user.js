@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router'
+import { loadContactsSuccess } from './contacts'
 
 export const AUTH_WAITING = 'AUTH_WAITING';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
@@ -24,6 +25,7 @@ export function signup(user) {
                 response => setTimeout(
                     () => {
                         dispatch(signupSuccess(response));
+                        dispatch(loadContactsSuccess(response.contacts));
                         browserHistory.push('/app');
                     }, 2000)
             )
@@ -56,12 +58,10 @@ export function login(email, password) {
         email,
         password
     };
-
-    console.log(creditionals);
     
     return dispatch => {
         dispatch(waiting());
-        fetch('users/login', {
+        fetch(`/users/login`, {
             method: 'post',
             body: JSON.stringify(creditionals),
             headers: new Headers({
@@ -77,7 +77,8 @@ export function login(email, password) {
             .then(
                 response => setTimeout(
                     () => {
-                        dispatch(loginSuccess(response));
+                        dispatch(loginSuccess(response.user));
+                        dispatch(loadContactsSuccess(response));
                         browserHistory.push('/app');
                     }, 2000)
             )

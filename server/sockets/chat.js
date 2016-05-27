@@ -11,10 +11,8 @@ module.exports = function(io) {
             } = message;
 
             chat.saveMessage(text, chatID, authorID, (error, message) => {
-                console.log(error);
                 if (error)
                     throw new Error(error);
-                console.log('dfsdf');
                 io.sockets.emit('chat message added', {
                     text,
                     authorID,

@@ -55,6 +55,9 @@ export default class MessageForm extends React.Component {
                         underlineShow = {true}
                         onChange = {::this.handleChange}
                         value = {this.state.text}
+                        style = {{
+                            width: 500
+                        }}
                     />
                     <RaisedButton
                         label = "Send"
