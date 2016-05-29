@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 import ChatRoom from '../ChatRoom'
 import SideBar from '../SideBar'
+import VideoConference from '../VideoConference'
+import CalendarEvents from '../CalendarEvents'
 
 import io from 'socket.io-client'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
-import VideoConference from '../VideoConference'
 
 @connect(
     state => ({
@@ -39,9 +39,10 @@ export default class MainWindow extends React.Component {
     render() {
         return (
             <div style = {this.style}>
-                <SideBar />
+                {/*<SideBar />
                 <VideoConference />
-                <ChatRoom />
+                <ChatRoom />*/}
+                <CalendarEvents />
             </div>
         );
     }
