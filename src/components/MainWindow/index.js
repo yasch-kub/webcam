@@ -3,6 +3,7 @@ import ChatRoom from '../ChatRoom'
 import SideBar from '../SideBar'
 import VideoConference from '../VideoConference'
 import CalendarEvents from '../CalendarEvents'
+import CalendarList from '../CalendarEventsList'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -63,6 +64,18 @@ export default class MainWindow extends React.Component {
                         }}
                     />
                 }
+                <CalendarList events = {[
+                {
+                    date: new Date(),
+                    title: 'Heloo',
+                    time: new Date()
+                },
+                {
+                    date: new Date(),
+                    title: 'Heloo43',
+                    time: new Date()
+                }
+                ]}/>
             </div>
         );
     }

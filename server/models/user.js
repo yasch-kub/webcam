@@ -37,6 +37,12 @@ const UserSchema = new mongoose.Schema({
         ref: 'User',
         type: mongoose.Schema.Types.ObjectId,
         unique: true
+    }],
+    
+    events: [{
+        ref: 'Event',
+        type: mongoose.Schema.Types.ObjectId,
+        unique: true
     }]
 
 });

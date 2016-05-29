@@ -6,6 +6,7 @@ const express = require('express'),
 
 const User = require('../models/user');
 const Chat = require('../models/chat');
+const Event = require('../models/event');
 
 let router = express.Router();
 
@@ -215,6 +216,60 @@ router.post('/:id/contacts', (req, res) => {
         if (error)
             return res.status(401).json(error);
         res.status(200).json(contacts);
+    })
+});
+
+router.get('/:id/events', (req, res) => {
+    User
+        .findById(ObjectId(req.params.id))
+        .populate('events')
+        .select('events')
+        .exec()
+        .then(
+            user => res.status(200).json(user.events),
+            error => res.status(403).json(error)
+        );
+});
+
+router.post('/:id/events', (req, res) => {
+    let{
+        title, date, time
+    } = req.body;
+    
+    async.waterfall([
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .exec()
+            .then(
+                user => callback(null, user),
+                error => callback(error, null)
+            ),
+        
+        (user, callback) => {
+            let event = new Event({
+                title, date, time
+            });
+
+            event.save((error, event) => {
+                if (error)
+                    return callback(error);
+                callback(null, user, event)
+            })
+        },
+        
+        (user, event, callback) => {
+            user.events.push(event);
+            
+            user.save((error, user) => {
+                if (error)
+                    return callback(error);
+                callback(null, event)
+            })
+        }
+    ], (error, event) => {
+        if (error)
+            return res.status(401).json(error);
+        res.status(200).json(event);
     })
 });
 
