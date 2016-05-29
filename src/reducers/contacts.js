@@ -2,6 +2,7 @@ import {
     LOAD_CONTACTS_SUCCESS,
     LOAD_SEARCH_CONTACTS_SUCCESS,
     ADD_CONTACT_SUCCESS,
+    ADD_CONTACT_WITH_REQUEST_SUCCESS,
     CHANGE_SEARCH_STRING
 } from '../actions/contacts';
 
@@ -36,11 +37,21 @@ export default function (state = initialState, action) {
 
             };
 
-        case ADD_CONTACT_SUCCESS:
+        case ADD_CONTACT_WITH_REQUEST_SUCCESS:
+            let contacts = state.contacts.slice();
+
+            contacts = contacts.concat(action.contacts);
+
             return {
                 ...state,
-                contacts: action.contacts
+                contacts
             };
+
+        case ADD_CONTACT_SUCCESS:
+            return {
+                ...state
+            };
+
         default:
             return state;
     }

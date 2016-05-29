@@ -22,7 +22,8 @@ import {
         otherContacts: state.contacts.other,
         contacts: state.contacts.contacts,
         userId: state.user.id,
-        searchString: state.contacts.searchString
+        searchString: state.contacts.searchString,
+        socket: state.socket
     }),
     dispatch => ({
         searchContacts: bindActionCreators(loadSearchContacts, dispatch),
@@ -31,8 +32,17 @@ import {
     })
 )
 export default class Contacts extends React.Component {
-    addContact(contactId) {
-        this.props.addContact(this.props.userId, contactId)
+
+    static childContextTypes = {
+        socket: PropTypes.object,
+        userID: PropTypes.string
+    };
+
+    getChildContext() {
+        return {
+            socket: this.props.socket,
+            userID: this.props.userId
+        }
     }
 
     render() {
@@ -43,7 +53,6 @@ export default class Contacts extends React.Component {
                 <ContactList
                     contacts = {this.props.contacts}
                     otherContacts = {this.props.otherContacts}
-                    addContact = {::this.addContact}
                     searchString = {this.props.searchString}
                     openChat = {this.props.openChat}
                 />

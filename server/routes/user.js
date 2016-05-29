@@ -220,7 +220,7 @@ router.post('/:id/contacts', (req, res) => {
 
 module.exports.findUserById = function(id, callback) {
     User
-        .findByID(ObjectId(id))
+        .findById(ObjectId(id))
         .exec()
         .then(
             user => callback(user),

@@ -5,6 +5,7 @@ import {
     SIGNUP,
     SIGNUP_SUCCESS,
     SIGNUP_FAILURE,
+    ADD_CONTACT_REQUEST
 } from '../actions/user';
 
 const initialState = {

@@ -20,7 +20,7 @@ import { Provider } from 'react-redux'
 const store = configureStore();
 
 import App from './components/App'
-import MainWindow from './components/MainWindow'
+import Container from './components/Container'
 import Registration from './components/Registration'
 import Login from './components/Login'
 
@@ -29,8 +29,8 @@ ReactDOM.render(
         <MuiThemeProvider muiTheme = {getMuiTheme(lightBaseTheme)}>
             <Router history = {browserHistory}>
                 <Route path = "/" component = {App}>
-                    <IndexRoute component = {MainWindow} />
-                    <Route path = "app" component = {MainWindow} />
+                    <IndexRoute component = {Login} />
+                    <Route path = "app" component = {Container} />
                     <Route path = "login" component = {Login} />
                     <Route path = "registration" component = {Registration} />
                 </Route>

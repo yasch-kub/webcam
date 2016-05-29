@@ -17,7 +17,11 @@ export default class CalendarEvent extends React.Component {
                 style = {{
 
                 }}
+                onChange = {(event, date) => {
+                    console.log(event,date);
+                }}
                 onTouchTap = {::this.onTouchTap}
+                defaultDate = {new Date()}
             />
         )
     }

@@ -16,6 +16,7 @@ export default class Contact extends React.Component {
     };
 
     static propTypes = {
+        id: PropTypes.string.isRequired,
         fullname: PropTypes.string.isRequired,
         avatar: PropTypes.string.isRequired,
         letter: PropTypes.boolean
@@ -23,6 +24,11 @@ export default class Contact extends React.Component {
 
     static defaultProps = {
         letter: false
+    };
+
+    static contextTypes = {
+        socket: PropTypes.object,
+        userID: PropTypes.string
     };
 
     letterStyle = {
@@ -36,7 +42,11 @@ export default class Contact extends React.Component {
     }
 
     addContact() {
-        this.props.addContact(this.props.id)
+        let socket = this.context.socket;
+        socket && socket.emit('add contact request', {
+            contactID: this.props.id,
+            userID: this.context.userID
+        });
     }
 
     letter =

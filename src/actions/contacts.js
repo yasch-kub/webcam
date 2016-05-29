@@ -38,6 +38,7 @@ export function loadSearchContacts(searchString) {
 }
 
 export const ADD_CONTACT_SUCCESS = "ADD_CONTACT_SUCCESS";
+export const ADD_CONTACT_WITH_REQUEST_SUCCESS = "ADD_CONTACT_WITH_REQUEST_SUCCESS";
 
 export function addContact(userId, contactId) {
     return dispatch =>
@@ -58,6 +59,13 @@ export function addContact(userId, contactId) {
 export function addContactSuccess(contacts) {
     return {
         type: ADD_CONTACT_SUCCESS,
+        contacts
+    }
+}
+
+export function addContactWithRequestSuccess(contacts) {
+    return {
+        type: ADD_CONTACT_WITH_REQUEST_SUCCESS,
         contacts
     }
 }

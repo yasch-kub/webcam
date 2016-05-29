@@ -27,7 +27,6 @@ export default class ContactList extends React.Component {
                     key = {i}
                     fullname = {contact.fullname}
                     avatar = {contact.avatar}
-                    addContact = {this.props.addContact}
                     id = {contact.id}
                     chatID = {contact.chatID}
                     onClick = {this.props.openChat}

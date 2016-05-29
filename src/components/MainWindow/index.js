@@ -4,18 +4,32 @@ import SideBar from '../SideBar'
 import VideoConference from '../VideoConference'
 import CalendarEvents from '../CalendarEvents'
 
-import io from 'socket.io-client'
-
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import ConfirmPushUp from '../ConfirmPushUp'
+
+import {
+    addContact
+} from '../../actions/contacts'
+
+import {
+    addContactRequest,
+    addContactReject
+} from '../../actions/events'
+
 @connect(
     state => ({
-        user: state.user
+        userWhoAdd: state.events.addContact ? state.contacts.contacts.find(user => user.id == state.events.addContact.userID) : null,
+        user: state.user,
+        socket: state.socket,
+        event: state.events.addContact
     }),
 
     dispatch => ({
-
+        addContactRequest: bindActionCreators(addContactRequest, dispatch),
+        addContactReject: bindActionCreators(addContactReject, dispatch),
+        addContactConfirm: bindActionCreators(addContact, dispatch)
     })
 )
 export default class MainWindow extends React.Component {
@@ -26,23 +40,29 @@ export default class MainWindow extends React.Component {
     };
 
     componentDidMount() {
-        const socket = io('localhost:3333', { query: `userID=${this.props.user.id}` });
-        socket.emit('add contact', {
-            userID: this.props.user.id,
-            contactID: 'dfgdfgdfgdf'
-        });
-        socket.on('add contact confirm', user => {
-
-        })
+        let socket = this.props.socket;
+        if (socket != null) {
+            socket.on('add contact request', this.props.addContactRequest);
+            socket.on('con', e => console.log(e));
+        }
     }
 
     render() {
         return (
             <div style = {this.style}>
-                {/*<SideBar />
-                <VideoConference />
-                <ChatRoom />*/}
-                <CalendarEvents />
+                <SideBar />
+                {
+                    this.props.event &&
+                    <ConfirmPushUp
+                        title = "Notification"
+                        message = {`${this.props.userWhoAdd.fullname} want to add your as a friend`}
+                        onReject = {this.props.addContactReject}
+                        onConfirm = {() => {
+                            this.props.addContactConfirm(this.props.user.id, this.props.userWhoAdd.id);
+                            this.props.addContactReject();
+                        }}
+                    />
+                }
             </div>
         );
     }
