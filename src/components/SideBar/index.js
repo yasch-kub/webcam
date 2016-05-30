@@ -28,11 +28,11 @@ export default class SideBar extends React.Component {
         return (
             <div>
                 <Drawer width = "350px" open = {false} >
-                    {/*<UserProfile
+                    <UserProfile
                         avatar = {this.props.user.avatar}
                         firstname = {this.props.user.firstname}
                         lastname = {this.props.user.lastname}
-                    />*/}
+                    />
                     <Tabs
                         value = {this.props.tabIndex}
                     >

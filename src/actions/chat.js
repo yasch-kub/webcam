@@ -1,3 +1,7 @@
+import {
+    connectChatToContact
+} from './contacts'
+
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
 
 export function sendMessage(text, chatID, authorID) {
@@ -28,7 +32,6 @@ export function loadChatMessages(chatID) {
 }
 
 export function loadChatMessagesSuccess(messages) {
-    console.log('messages', messages)
     return {
         type: LOAD_CHAT_MESSAGES_SUCCESS,
         messages
@@ -44,12 +47,46 @@ export function receiveMessage(message) {
     }
 }
 
-export const OPEN_CHAT = "OPEN_CHAT"
+export const OPEN_CHAT = "OPEN_CHAT";
 
 export function openChat(chatID) {
     console.log(chatID);
     return {
         type: OPEN_CHAT,
         chatID
+    }
+}
+
+export function loadUserChats(userID) {
+    return dispatch => fetch(`/users/${userID}/chats`)
+        .then(response => response.json())
+        .then(chat => dispatch(loadChatsSuccess))
+}
+
+
+export function createChat(userID, contactID) {
+    return dispatch => fetch(`/chats?users[]=${userID}&users[]=${contactID}`, {
+        method: 'post',
+        body: JSON.stringify({
+            users: [userID, contactID]
+        }),
+        headers: new Headers({
+            "Content-Type": "application/json"
+        })
+    })
+        .then(response => response.json())
+        .then(response => {
+            dispatch(createChatSuccess(response));
+            dispatch(connectChatToContact(response.id, contactID))
+        })
+        .catch(error => console.log(error));
+}
+
+export const CREATE_CHAT_SUCCESS = "CREATE_CHAT_SUCCESS";
+
+function createChatSuccess(chat) {
+    return {
+        type: CREATE_CHAT_SUCCESS,
+        chat
     }
 }

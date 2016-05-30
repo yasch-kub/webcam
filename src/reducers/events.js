@@ -12,9 +12,7 @@ export default function(state = initialState, action) {
         case ADD_CONTACT_REQUEST:
             return {
                 ...state,
-                addContact: {
-                    userID: action.userID
-                }
+                addContact: action.user
             };
 
         case ADD_CONTACT_REJECT:

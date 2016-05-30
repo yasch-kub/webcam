@@ -1,5 +1,13 @@
 export const LOAD_CONTACTS_SUCCESS = "LOAD_CONTACTS_SUCCESS";
 
+export function loadContacts(userID) {
+    return dispatch => fetch(`/users/${userID}/contacts`)
+        .then(response => response.json())
+        .then(contacts => dispatch(loadContactsSuccess(contacts)))
+        .catch(error => console.log(error));
+
+}
+
 export function loadContactsSuccess(contacts) {
     return {
         type: LOAD_CONTACTS_SUCCESS,
@@ -76,5 +84,15 @@ export function changeSearchString(searchString) {
     return {
         type: CHANGE_SEARCH_STRING,
         searchString
+    }
+}
+
+export const CONNECT_CHAT_TO_CONTACT = "CONNECT_CHAT_TO_CONTACT";
+
+export function connectChatToContact(chatID, contactID) {
+    return {
+        type: CONNECT_CHAT_TO_CONTACT,
+        contactID,
+        chatID
     }
 }

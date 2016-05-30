@@ -10,12 +10,14 @@ export default class UserProfile extends React.Component {
     static defaultProps = {
         firstname: PropTypes.string.isRequired,
         lastname: PropTypes.string.isRequired,
-        avatar: PropTypes.string
+        avatar: PropTypes.string.isRequired
     };
 
     style = {
-        height: 400,
-        width: 400,
+        height: 250,
+        width: '100%',
+        boxSizing: 'inherit',
+        textAlign: 'center',
         padding: 15
     };
 
@@ -24,15 +26,13 @@ export default class UserProfile extends React.Component {
             <div
                 style = {this.style}
             >
-                <Paper
-                    zDepth = {2}
-                    circle = {true}
-                >
-                    <Avatar
+               <Avatar
                         src = {this.props.avatar}
-                        size = {100}
-                    />
-                </Paper>
+                        size = {150}
+                />
+                <h2>
+                    {`${this.props.firstname} ${this.props.lastname}`}
+                </h2>
             </div>
         );
     }

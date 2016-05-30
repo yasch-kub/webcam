@@ -1,7 +1,8 @@
 import {
     RECEIVE_CHAT_MESSAGE,
     LOAD_CHAT_MESSAGES_SUCCESS,
-    OPEN_CHAT
+    OPEN_CHAT,
+    CREATE_CHAT_SUCCESS
 } from '../actions/chat'
 
 const initialState = {
@@ -54,6 +55,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 id: action.chatID
+            };
+
+        case CREATE_CHAT_SUCCESS:
+            return {
+                ...state,
+                ...action.chat
             };
 
         default:

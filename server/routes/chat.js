@@ -14,12 +14,25 @@ const ObjectId = mongoose.Types.ObjectId;
 
 router.post('/', (req, res) => {
     let chat = new Chat();
+    console.log(req.params)
     chat
         .save()
         .then(
-            chat => res.send(chat),
+            chat => {
+                if (req.body.users) {
+                    addUserToChat(chat.id, req.body.users[0], (error, result) => {
+                        if (error)
+                            return res.json(error);
+                        addUserToChat(chat.id, req.body.users[1], (error, result) => {
+                            if (error)
+                                return res.json(error);
+                            res.json(result);
+                        })
+                    })
+                }
+            },
             error => res.send(error)
-        )
+        );
 });
 
 router.get('/', (req, res) => {
@@ -159,6 +172,7 @@ function addUserToChat(chatID, userID, callback) {
         (user, callback) => {
             Chat
                 .findById(ObjectId(chatID))
+                .populate('users')
                 .exec()
                 .then(
                     chat => callback(null, chat, user),

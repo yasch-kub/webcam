@@ -14,7 +14,9 @@ import {
 } from '../../actions/contacts'
 
 import {
-    openChat
+    openChat,
+    loadChatMessages,
+    createChat
 } from '../../actions/chat'
 
 @connect(
@@ -23,12 +25,15 @@ import {
         contacts: state.contacts.contacts,
         userId: state.user.id,
         searchString: state.contacts.searchString,
-        socket: state.socket
+        socket: state.socket,
+        chatID: state.chat.id
     }),
     dispatch => ({
+        loadChatMessages: bindActionCreators(loadChatMessages, dispatch),
         searchContacts: bindActionCreators(loadSearchContacts, dispatch),
         addContact: bindActionCreators(addContact, dispatch),
-        openChat: bindActionCreators(openChat, dispatch)
+        openChat: bindActionCreators(openChat, dispatch),
+        createChat: bindActionCreators(createChat, dispatch)
     })
 )
 export default class Contacts extends React.Component {
@@ -45,6 +50,22 @@ export default class Contacts extends React.Component {
         }
     }
 
+    openChat(chatID, contactID) {
+        if (chatID) {
+            console.log('sdfsdf')
+            this.props.loadChatMessages(chatID);
+            this.props.openChat(chatID);
+            this.props.socket.emit('disconnect from chat', {
+                chatID: this.props.chatID
+            });
+            this.props.socket.emit('connect to chat', {
+                chatID
+            })
+        } else {
+            this.props.createChat(this.props.userId, contactID)
+        }
+    }
+
     render() {
         console.log(this.props.contacts);
         return(
@@ -54,7 +75,7 @@ export default class Contacts extends React.Component {
                     contacts = {this.props.contacts}
                     otherContacts = {this.props.otherContacts}
                     searchString = {this.props.searchString}
-                    openChat = {this.props.openChat}
+                    openChat = {::this.openChat}
                 />
             </div>
         );

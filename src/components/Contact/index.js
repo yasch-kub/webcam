@@ -61,7 +61,7 @@ export default class Contact extends React.Component {
     avatar = <Avatar src={this.props.avatar} />;
     
     handleTouchTap(event) {
-        this.props.onClick && this.props.onClick(this.props.chatID);
+        this.props.onClick && this.props.onClick(this.props.chatID, this.props.id);
         this.setState({
             isMenuOpen: true,
             anchorEl: event.currentTarget

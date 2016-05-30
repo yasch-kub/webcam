@@ -20,7 +20,7 @@ import {
 
 @connect(
     state => ({
-        userWhoAdd: state.events.addContact ? state.contacts.contacts.find(user => user.id == state.events.addContact.userID) : null,
+        userWhoAdd: state.events.addContact,
         user: state.user,
         socket: state.socket,
         event: state.events.addContact
@@ -29,7 +29,7 @@ import {
     dispatch => ({
         addContactRequest: bindActionCreators(addContactRequest, dispatch),
         addContactReject: bindActionCreators(addContactReject, dispatch),
-        addContactConfirm: bindActionCreators(addContact, dispatch)
+        addContact: bindActionCreators(addContact, dispatch)
     })
 )
 export default class MainWindow extends React.Component {
@@ -44,7 +44,16 @@ export default class MainWindow extends React.Component {
         if (socket != null) {
             socket.on('add contact request', this.props.addContactRequest);
             socket.on('con', e => console.log(e));
+            socket.on('add contact request confirm', this.props.addContact)
         }
+    }
+
+    addContactConfirm() {
+        this.props.socket.emit('add contact request confirm', {
+            userID: this.props.user.id,
+            contactID: this.props.userWhoAdd.id
+        });
+        this.props.addContact(this.props.user.id, this.props.userWhoAdd.id);
     }
 
     render() {
@@ -58,11 +67,14 @@ export default class MainWindow extends React.Component {
                         message = {`${this.props.userWhoAdd.fullname} want to add your as a friend`}
                         onReject = {this.props.addContactReject}
                         onConfirm = {() => {
-                            this.props.addContactConfirm(this.props.user.id, this.props.userWhoAdd.id);
+                            this.addContactConfirm();
                             this.props.addContactReject();
                         }}
                     />
                 }
+
+                <VideoConference />
+                {<ChatRoom />}
             </div>
         );
     }

@@ -30,7 +30,6 @@ router.post('/login', (req, res) => {
                 User
                     .findOne({ email })
                     .select("+password")
-                    .populate('contacts')
                     .exec()
                     .then(
                        user => user
@@ -157,16 +156,72 @@ router.delete('/:id/contacts', (req, res) => {
 });
 
 router.get('/:id/contacts', (req, res) => {
-    console.log('get contacts');
-    User
-        .findById(ObjectId(req.params.id))
-        .populate('contacts')
-        .select('contacts')
-        .exec()
-        .then(
-            user => res.status(200).json(user.contacts),
-            error => res.status(403).json(error)
-        );
+    async.waterfall([
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .populate('contacts')
+            .exec()
+            .then(
+                user => callback(null, user),
+                error => callback(error, null)
+            ),
+
+        (user, callback) => Chat
+            .find({users: user.id})
+            .exec()
+            .then(
+                chats => callback(null, user.contacts, chats),
+                error => callback(error, null)
+            ),
+
+        (contacts, chats, callback) => {
+            let contactsList = [];
+
+            for (let i = 0; i < contacts.length; i++) {
+                let contact = contacts[i].toObject();
+                if (chats.length != 0) {
+                    let chat = chats.find(chat => chat.users.indexOf(contacts[i].id) != -1);
+                    contact.chat = chat.users.length == 2 ? chat.id : null;
+                } else
+                    contact.chat = null
+
+                contactsList.push(contact);
+            }
+
+            callback(contactsList)
+        }
+
+    ], (error, contacts) => {
+        if (error)
+            return res.status(403).json(error);
+
+        res.status(200).json(contacts)
+    });
+});
+
+router.get('/:id/chats', (req, res) => {
+    async.waterfall([
+        callback => User
+            .findById(ObjectId(req.params.id))
+            .exec()
+            .then(
+                user => callback(null, user),
+                error => callback(error, null)
+            ),
+
+        (user, callback) => Chat
+            .find({users: user.id})
+            .exec()
+            .then(
+                chats => callback(null, chats),
+                error => callback(error, null)
+            )
+
+    ], (error, chats) => {
+        if (error)
+            return res.status(401).json(error);
+        res.status(200).json(chats);
+    })
 });
 
 router.post('/:id/contacts', (req, res) => {
@@ -190,31 +245,20 @@ router.post('/:id/contacts', (req, res) => {
             ),
 
         (user, newContact, callback) => {
-            console.log(user, newContact)
             if(!user.contacts.find(user => user == newContact.id))
                 user.contacts.push(newContact);
 
             user.save((error, user) => {
                 if (error)
                     return callback(error);
-                callback(null)
+                callback(null, newContact)
             })
-        },
+        }
 
-        callback => User
-            .findById(ObjectId(req.params.id))
-            .populate('contacts')
-            .select('contacts')
-            .exec()
-            .then(
-                user => callback(null, user.contacts),
-                error => callback(error, null)
-            )
-
-    ], (error, contacts) => {
+    ], (error, newContact) => {
         if (error)
             return res.status(401).json(error);
-        res.status(200).json(contacts);
+        res.status(200).json(newContact);
     })
 });
 

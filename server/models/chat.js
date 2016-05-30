@@ -12,6 +12,14 @@ const ChatSchema = new mongoose.Schema({
     }]
 });
 
+ChatSchema.set('toJSON', {
+    virtuals: true
+});
+
+ChatSchema.set('toObject', {
+    virtuals: true
+});
+
 ChatSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('Chat', ChatSchema);

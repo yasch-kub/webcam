@@ -1,5 +1,4 @@
 import { browserHistory } from 'react-router'
-import { loadContactsSuccess } from './contacts'
 
 export const AUTH_WAITING = 'AUTH_WAITING';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
@@ -78,7 +77,6 @@ export function login(email, password) {
                 response => setTimeout(
                     () => {
                         dispatch(loginSuccess(response));
-                        dispatch(loadContactsSuccess(response.contacts));
                         browserHistory.push('/app');
                     }, 2000)
             )

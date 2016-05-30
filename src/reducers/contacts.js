@@ -3,7 +3,8 @@ import {
     LOAD_SEARCH_CONTACTS_SUCCESS,
     ADD_CONTACT_SUCCESS,
     ADD_CONTACT_WITH_REQUEST_SUCCESS,
-    CHANGE_SEARCH_STRING
+    CHANGE_SEARCH_STRING,
+    CONNECT_CHAT_TO_CONTACT
 } from '../actions/contacts';
 
 const initialState = {
@@ -38,6 +39,7 @@ export default function (state = initialState, action) {
             };
 
         case ADD_CONTACT_WITH_REQUEST_SUCCESS:
+        {
             let contacts = state.contacts.slice();
 
             contacts = contacts.concat(action.contacts);
@@ -46,11 +48,31 @@ export default function (state = initialState, action) {
                 ...state,
                 contacts
             };
+        }
 
         case ADD_CONTACT_SUCCESS:
+        {
+            let contacts = state.contacts.slice();
+
+            contacts = contacts.concat(action.contacts);
+
             return {
-                ...state
+                ...state,
+                contacts
             };
+        }
+
+        case CONNECT_CHAT_TO_CONTACT: {
+            let contacts = state.contacts.slice();
+            let contact = contacts.find(contact => contact.id == action.contactID);
+            contact.chat = action.chatID;
+            console.log(contact, contacts);
+
+            return {
+                ...state,
+                contacts
+            }
+        }
 
         default:
             return state;

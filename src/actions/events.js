@@ -4,15 +4,14 @@ import { addContactWithRequestSuccess } from './contacts'
 
 export function addContactRequest(user) {
     return dispatch => {
-        dispatch(addContactWithRequestSuccess([user]));
-        dispatch(addContact(user.id))
+        dispatch(addContact(user))
     }
 }
 
 function addContact(user) {
     return {
         type: ADD_CONTACT_REQUEST,
-        userID: user
+        user
     }
 }
 

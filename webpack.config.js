@@ -39,7 +39,7 @@ module.exports = {
         host: 'localhost',
         hot: true,
         proxy: [{
-            path: /users\/*|messages\/*/,
+            path: /users\/*|messages\/*|chats\/*/,
             target: 'http://localhost:3333'
         }]
     }
