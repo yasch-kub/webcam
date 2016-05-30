@@ -13,25 +13,45 @@ let router = express.Router();
 const ObjectId = mongoose.Types.ObjectId;
 
 router.post('/', (req, res) => {
-    let chat = new Chat();
-    console.log(req.params)
-    chat
-        .save()
+
+    Chat
+        .findOne()
+        .and([
+            {
+                users: req.body.users[0]
+            },
+            {
+                users: req.body.users[1]
+            }
+        ])
+        .populate('users')
+        .exec()
         .then(
             chat => {
-                if (req.body.users) {
-                    addUserToChat(chat.id, req.body.users[0], (error, result) => {
-                        if (error)
-                            return res.json(error);
-                        addUserToChat(chat.id, req.body.users[1], (error, result) => {
-                            if (error)
-                                return res.json(error);
-                            res.json(result);
-                        })
-                    })
-                }
+                if (!chat) {
+                    let chat = new Chat();
+                    chat
+                        .save()
+                        .then(
+                            chat => {
+                                if (req.body.users) {
+                                    addUserToChat(chat.id, req.body.users[0], (error, result) => {
+                                        if (error)
+                                            return res.json(error);
+                                        addUserToChat(chat.id, req.body.users[1], (error, result) => {
+                                            if (error)
+                                                return res.json(error);
+                                            res.json(result);
+                                        })
+                                    })
+                                }
+                            },
+                            error => res.send(error)
+                        );
+                } else
+                    res.send(chat)
             },
-            error => res.send(error)
+            error => res.json(error)
         );
 });
 
