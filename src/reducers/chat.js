@@ -54,7 +54,8 @@ export default function (state = initialState, action) {
         case OPEN_CHAT:
             return {
                 ...state,
-                id: action.chatID
+                id: action.chatID,
+                contactID: action.contactID
             };
 
         case CREATE_CHAT_SUCCESS:

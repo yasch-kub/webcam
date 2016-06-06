@@ -52,9 +52,8 @@ export default class Contacts extends React.Component {
 
     openChat(chatID, contactID) {
         if (chatID) {
-            console.log('sdfsdf')
             this.props.loadChatMessages(chatID);
-            this.props.openChat(chatID);
+            this.props.openChat(chatID, contactID);
             this.props.socket.emit('disconnect from chat', {
                 chatID: this.props.chatID
             });

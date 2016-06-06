@@ -49,11 +49,11 @@ export function receiveMessage(message) {
 
 export const OPEN_CHAT = "OPEN_CHAT";
 
-export function openChat(chatID) {
-    console.log(chatID);
+export function openChat(chatID, contactID) {
     return {
         type: OPEN_CHAT,
-        chatID
+        chatID,
+        contactID
     }
 }
 

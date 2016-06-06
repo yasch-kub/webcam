@@ -1,48 +1,71 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import {
     Paper
 } from 'material-ui'
 
 export default class VideoTranslation extends React.Component {
-    componentDidMount() {
-        navigator.getUserMedia =
-            navigator.getUserMedia
-            || navigator.webkitGetUserMedia
-            || navigator.mozGetUserMedia
-            || navigator.msGetUserMedia;
 
-        navigator.getUserMedia({audio: true, video: true},
-            function(pLocalMediaStream){
-                /*
-                 * создаём элемент Video,
-                 * в который помещаем картинку с веб-камеры\
-                 */
-                var lVideo = document.getElementById("1");
-                lVideo.autoplay = true;
-                lVideo.src = URL.createObjectURL(pLocalMediaStream);
+    static propTypes = {
+        streamSrc: PropTypes.string,
+        selfSrc: PropTypes.string,
+        interlocutorStreamSrc: PropTypes.string,
+        muted: PropTypes.bool
+    };
 
-            },
-            function(pError) { /* если возникла ошибка - выводим её */
-                alert(pError);
-            });
-    }
+    paperStyle = {
+        padding: 5,
+        display: 'block',
+        width: '100%',
+        height: '100%',
+        margin: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        position: 'relative'
+    };
+
+    streamVideoStyle = {
+        height: '100%',
+        width: '100%'
+    };
+
+    selfVideoStyle = {
+        width: '100%',
+        height: 'auto'
+    };
+
+    selfPaperStyle = {
+        width: 200,
+        display: 'block',
+        padding: '5px 5px 0px 5px',
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 15,
+        right: 15
+    };
 
     render() {
         return (
             <Paper
                 zIndex = {2}
-                style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    margin: 10,
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)'
-                }}
+                style = {this.paperStyle}
             >
                 <video
-                    id="1"
-                ></video>
+                    style = {this.streamVideoStyle}
+                    autoPlay
+                    src = {this.props.interlocutorStreamSrc}
+                    muted = {this.props.muted}
+                />
+                <Paper
+                    zIndex = {4}
+                    style = {this.selfPaperStyle}
+                >
+                    <video
+                        style = {this.selfVideoStyle}
+                        autoPlay
+                        src = {this.props.selfSrc}
+                        muted
+                    />
+                </Paper>
             </Paper>
         );
     }

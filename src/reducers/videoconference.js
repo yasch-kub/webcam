@@ -1,5 +1,8 @@
 import {
-    CHANGE_MUTE_NOTIFICATION
+    CHANGE_MUTE_NOTIFICATION,
+    CREATE_TRANSLATION,
+    CREATE_PEER_SUCCESS,
+    GET_VIDEO_STREAM
 } from '../actions/videoconference'
 
 const initialState = {
@@ -13,7 +16,29 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isMute: !isMute
+            };
+
+        case CREATE_TRANSLATION:
+            return {
+                ...state,
+                src: action.src,
+                stream: action.stream
+            };
+
+        case CREATE_PEER_SUCCESS:
+            return {
+                ...state,
+                peer: action.peer
+            };
+
+        case GET_VIDEO_STREAM: {
+            return {
+                ...state,
+                interlocutorStreamSrc: action.src,
+                interlocutorStream: action.stream
             }
+        }
+
         default:
             return state
     }

@@ -2,7 +2,8 @@ var webpack = require('webpack'),
     path = require('path');
 
 module.exports = {
-    devtools: 'eval',
+    debug: true,
+    devtools: 'source-map',
     entry: [
         `webpack-dev-server/client?http://localhost:${process.env.PORT || 3000}/`,
         'webpack/hot/only-dev-server',

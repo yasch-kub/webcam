@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
 import {
     IconButton,
@@ -8,7 +8,12 @@ import {
 import {red500, greenA700} from 'material-ui/styles/colors'
 
 export default class CallControlPanel extends React.Component {
-    
+
+    static propTypes = {
+        changeMuteNotification: PropTypes.func,
+        call: PropTypes.func
+    };
+
     render() {
         return (
             <Paper
@@ -27,7 +32,7 @@ export default class CallControlPanel extends React.Component {
                     circle = {true}
                     style={{
                         display: 'inline-block',
-                        margin: 5,
+                        margin: 5
                     }}
                 >
                     <IconButton
@@ -37,6 +42,7 @@ export default class CallControlPanel extends React.Component {
                         }}
                         tooltip = "Call"
                         tooltipPosition = "bottom-center"
+                        onClick = {this.props.call}
                     >
                         call
                     </IconButton>
