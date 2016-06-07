@@ -11,7 +11,13 @@ export default class CallControlPanel extends React.Component {
 
     static propTypes = {
         changeMuteNotification: PropTypes.func,
-        call: PropTypes.func
+        call: PropTypes.func,
+        endCall: PropTypes.func
+    };
+
+    static defaultProps = {
+        call: () => {},
+        endCall: () => {}
     };
 
     render() {
@@ -62,6 +68,7 @@ export default class CallControlPanel extends React.Component {
                         }}
                         tooltip = "End call"
                         tooltipPosition = "bottom-center"
+                        onClick = {this.props.endCall}
                     >
                         call_end
                     </IconButton>

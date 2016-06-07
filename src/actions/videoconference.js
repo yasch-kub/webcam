@@ -47,12 +47,53 @@ export function getStream(stream) {
     }
 }
 
+export const SAVE_CALL = "SAVE_CALL";
+
+export function saveCall(call) {
+    return {
+        type: SAVE_CALL,
+        call
+    }
+}
+
+export const END_CALL = "END_CALL";
+
+export function endCall() {
+    return {
+        type: END_CALL
+    }
+}
+
+export function callRejected() {
+    return dispatch => {
+        dispatch(showCallRejected());
+        setTimeout(() => {
+            dispatch(hideCallRejected());
+        }, 5000)
+    }
+}
+
+export const SHOW_CALL_REJECTED = "SHOW_CALL_REJECTED";
+export const HIDE_CALL_REJECTED = "HIDE_CALL_REJECTED";
+
+export function showCallRejected() {
+    return {
+        type: SHOW_CALL_REJECTED
+    };
+}
+
+export function hideCallRejected() {
+    return {
+        type: HIDE_CALL_REJECTED
+    };
+}
+
+
 export const INCOMING_CALL_REQUEST = "INCOMING_CALL_REQUEST";
 export const INCOMING_CALL_CONFIRM = "INCOMING_CALL_CONFIRM";
 export const INCOMING_CALL_REJECT = "INCOMING_CALL_REJECT";
 
 export function incomingCallRequest(options) {
-    console.log(options)
     return {
         type: INCOMING_CALL_REQUEST,
         caller: options
@@ -66,5 +107,7 @@ export function incomingCallConfirm() {
 }
 
 export function incomingCallReject() {
-
+    return {
+        type: INCOMING_CALL_REJECT
+    };
 }

@@ -10,7 +10,8 @@ export default class VideoTranslation extends React.Component {
         streamSrc: PropTypes.string,
         selfSrc: PropTypes.string,
         interlocutorStreamSrc: PropTypes.string,
-        muted: PropTypes.bool
+        muted: PropTypes.bool,
+        enabled: PropTypes.bool
     };
 
     paperStyle = {
@@ -55,6 +56,7 @@ export default class VideoTranslation extends React.Component {
                     autoPlay
                     src = {this.props.interlocutorStreamSrc}
                     muted = {this.props.muted}
+                    hidden = {!this.props.enabled}
                 />
 
                 <Paper

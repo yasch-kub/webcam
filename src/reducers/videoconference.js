@@ -4,12 +4,19 @@ import {
     CREATE_PEER_SUCCESS,
     GET_VIDEO_STREAM,
     INCOMING_CALL_REQUEST,
-    INCOMING_CALL_CONFIRM
+    INCOMING_CALL_CONFIRM,
+    INCOMING_CALL_REJECT,
+    SAVE_CALL,
+    END_CALL,
+    SHOW_CALL_REJECTED,
+    HIDE_CALL_REJECTED
 } from '../actions/videoconference'
 
 const initialState = {
     isMute: false,
-    isCalling: false
+    isCalling: false,
+    enabled: true,
+    isCallRejectedMessage: false
 };
 
 export default function(state = initialState, action) {
@@ -38,9 +45,23 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 interlocutorStreamSrc: action.src,
-                interlocutorStream: action.stream
+                interlocutorStream: action.stream,
+                enabled: true
             }
         }
+
+        case SAVE_CALL:
+            return {
+                ...state,
+                call: action.call
+            };
+
+        case END_CALL:
+            return {
+                ...state,
+                call: null,
+                enabled: false
+            };
 
         case INCOMING_CALL_REQUEST:
             return {
@@ -53,6 +74,24 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isCalling: false
+            };
+
+        case INCOMING_CALL_REJECT:
+            return {
+                ...state,
+                isCalling: false
+            };
+
+        case SHOW_CALL_REJECTED:
+            return {
+                ...state,
+                isCallRejectedMessage: true
+            };
+
+        case HIDE_CALL_REJECTED:
+            return {
+                ...state,
+                isCallRejectedMessage: false
             };
 
         default:
