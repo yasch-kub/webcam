@@ -60,12 +60,15 @@ export default class Contact extends React.Component {
 
     avatar = <Avatar src={this.props.avatar} />;
     
-    handleTouchTap(event) {
-        this.props.onClick && this.props.onClick(this.props.chatID, this.props.id);
+    openContextMenu(event) {
         this.setState({
             isMenuOpen: true,
             anchorEl: event.currentTarget
         });
+    }
+
+    handleClick() {
+        this.props.onClick && this.props.onClick(this.props.chatID, this.props.id);
     }
 
     render() {
@@ -78,7 +81,8 @@ export default class Contact extends React.Component {
                     leftAvatar={
                         this.props.letter && this.letter
                     }
-                    onTouchTap={::this.handleTouchTap}
+                    onContextMenu = {::this.openContextMenu}
+                    onClick = {::this.handleClick}
                 />
                 <ContactMenu
                     open = {this.state.isMenuOpen}

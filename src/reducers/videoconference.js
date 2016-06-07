@@ -2,11 +2,14 @@ import {
     CHANGE_MUTE_NOTIFICATION,
     CREATE_TRANSLATION,
     CREATE_PEER_SUCCESS,
-    GET_VIDEO_STREAM
+    GET_VIDEO_STREAM,
+    INCOMING_CALL_REQUEST,
+    INCOMING_CALL_CONFIRM
 } from '../actions/videoconference'
 
 const initialState = {
-    isMute: false
+    isMute: false,
+    isCalling: false
 };
 
 export default function(state = initialState, action) {
@@ -38,6 +41,19 @@ export default function(state = initialState, action) {
                 interlocutorStream: action.stream
             }
         }
+
+        case INCOMING_CALL_REQUEST:
+            return {
+                ...state,
+                caller: action.caller,
+                isCalling: true
+            };
+
+        case INCOMING_CALL_CONFIRM:
+            return {
+                ...state,
+                isCalling: false
+            };
 
         default:
             return state

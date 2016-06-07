@@ -20,7 +20,8 @@ export default class VideoTranslation extends React.Component {
         height: '100%',
         margin: 10,
         backgroundColor: 'rgba(255, 255, 255, 0.15)',
-        position: 'relative'
+        position: 'relative',
+        textAlign: 'center'
     };
 
     streamVideoStyle = {
@@ -55,6 +56,7 @@ export default class VideoTranslation extends React.Component {
                     src = {this.props.interlocutorStreamSrc}
                     muted = {this.props.muted}
                 />
+
                 <Paper
                     zIndex = {4}
                     style = {this.selfPaperStyle}

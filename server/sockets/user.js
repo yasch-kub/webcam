@@ -55,6 +55,17 @@ module.exports = function(io) {
             })
         });
 
+        socket.on('call request', query => {
+            console.log("Call request", query.callerID, query.receiverID);
+            findUserById(query.callerID, user => io.to(`user-${query.receiverID}`).emit('call request', user))
+        })
+
+        socket.on('call request confirm', query => {
+            console.log("Call request confirm", query.callerID);
+            io.to(`user-${query.callerID}`).emit('call request confirm');
+        })
+
+
 
     });
 };

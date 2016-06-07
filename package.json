@@ -33,6 +33,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
+    "@kadira/storybook": "^1.29.0",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",

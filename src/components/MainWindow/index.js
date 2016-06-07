@@ -3,6 +3,7 @@ import ChatRoom from '../ChatRoom'
 import SideBar from '../SideBar'
 import VideoConference from '../VideoConference'
 import CalendarEvents from '../CalendarEvents'
+import CallRequest from '../CallRequest'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -74,7 +75,7 @@ export default class MainWindow extends React.Component {
                 }
 
                 <VideoConference />
-                {<ChatRoom />}
+                <ChatRoom />
             </div>
         );
     }

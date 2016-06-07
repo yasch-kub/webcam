@@ -46,3 +46,25 @@ export function getStream(stream) {
         stream
     }
 }
+
+export const INCOMING_CALL_REQUEST = "INCOMING_CALL_REQUEST";
+export const INCOMING_CALL_CONFIRM = "INCOMING_CALL_CONFIRM";
+export const INCOMING_CALL_REJECT = "INCOMING_CALL_REJECT";
+
+export function incomingCallRequest(options) {
+    console.log(options)
+    return {
+        type: INCOMING_CALL_REQUEST,
+        caller: options
+    }
+}
+
+export function incomingCallConfirm() {
+    return {
+        type: INCOMING_CALL_CONFIRM
+    }
+}
+
+export function incomingCallReject() {
+
+}
