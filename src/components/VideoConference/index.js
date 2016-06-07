@@ -145,7 +145,7 @@ export default class VideoConference extends React.Component {
                 {
                     this.props.isCallRejectedMessage &&
                     <h2 style = {{
-                        marginTop: -350,
+                        marginTop: -350
                     }}>
                         User has refused to accept the call
                     </h2>

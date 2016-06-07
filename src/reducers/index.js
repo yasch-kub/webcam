@@ -5,6 +5,7 @@ import chat from './chat';
 import videoconference from './videoconference';
 import socket from './socket';
 import events from './events';
+import calendar from './calendar';
 
 export {
     user,
@@ -13,5 +14,6 @@ export {
     chat,
     videoconference,
     socket,
-    events
+    events,
+    calendar
 };

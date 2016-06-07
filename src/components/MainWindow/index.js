@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import ChatRoom from '../ChatRoom'
 import SideBar from '../SideBar'
 import VideoConference from '../VideoConference'
-import CalendarEvents from '../CalendarEvents'
+import Calendar from '../Calendar'
 import CallRequest from '../CallRequest'
 
 import { bindActionCreators } from 'redux'
@@ -24,7 +24,8 @@ import {
         userWhoAdd: state.events.addContact,
         user: state.user,
         socket: state.socket,
-        event: state.events.addContact
+        event: state.events.addContact,
+        isCalendarOpen: state.calendar.isOpen
     }),
 
     dispatch => ({
@@ -73,9 +74,18 @@ export default class MainWindow extends React.Component {
                         }}
                     />
                 }
-
                 <VideoConference />
                 <ChatRoom />
+                {
+                    this.props.isCalendarOpen &&
+                    <Calendar
+                        style={{
+                        position: 'relative',
+                        marginTop: 10,
+                        marginLeft: 355
+                    }}
+                    />
+                }
             </div>
         );
     }

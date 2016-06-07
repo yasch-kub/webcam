@@ -6,24 +6,38 @@ import {
     FontIcon
 } from 'material-ui';
 
-import UserProfile from '../UserProfile';
-import Contacts from '../Contacts';
-import RecentCalls from '../RecentCalls';
+import UserProfile from '../UserProfile'
+import Contacts from '../Contacts'
+import RecentCalls from '../RecentCalls'
+import UserPanel from '../UserPanel'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { changeTab } from '../../actions/sidebar'
+import {
+    openOrCloseCalendar,
+    loadEvents
+} from '../../actions/calendar'
 
 @connect(
     state => ({
         tabIndex: state.sidebar.tabIndex,
-        user: state.user
+        user: state.user,
+        isCalendarOpen: state.calendar.isOpen
     }),
     dispatch => ({
-        changeTab: bindActionCreators(changeTab, dispatch)
+        changeTab: bindActionCreators(changeTab, dispatch),
+        openOrCloseCalendar: bindActionCreators(openOrCloseCalendar, dispatch),
+        loadCalendarEvents: bindActionCreators(loadEvents, dispatch)
     })
 )
 export default class SideBar extends React.Component {
+
+    calendarClickHandle() {
+        this.props.openOrCloseCalendar();
+        this.props.loadCalendarEvents(this.props.user.id)
+    }
+
     render() {
         return (
             <div>
@@ -33,6 +47,10 @@ export default class SideBar extends React.Component {
                         firstname = {this.props.user.firstname}
                         lastname = {this.props.user.lastname}
                     />
+                    <UserPanel
+                        calendarClickHandle = {::this.calendarClickHandle}
+                        isCalendarOpen = {this.props.isCalendarOpen}
+                    />
                     <Tabs
                         value = {this.props.tabIndex}
                     >
@@ -41,7 +59,6 @@ export default class SideBar extends React.Component {
                             label = "CONTACTS"
                             value = {0}
                         >
-                            
                             <Contacts />
                         </Tab>
                         <Tab

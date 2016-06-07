@@ -29,7 +29,7 @@ ReactDOM.render(
         <MuiThemeProvider muiTheme = {getMuiTheme(lightBaseTheme)}>
             <Router history = {browserHistory}>
                 <Route path = "/" component = {App}>
-                    <IndexRoute component = {Login} />
+                    <IndexRoute component = {Container} />
                     <Route path = "app" component = {Container} />
                     <Route path = "login" component = {Login} />
                     <Route path = "registration" component = {Registration} />
