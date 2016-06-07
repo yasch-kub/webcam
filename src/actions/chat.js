@@ -2,6 +2,8 @@ import {
     connectChatToContact
 } from './contacts'
 
+import api from '../api'
+
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
 
 export function sendMessage(text, chatID, authorID) {
@@ -25,7 +27,7 @@ export function sendMessageSuccess(message) {
 export const LOAD_CHAT_MESSAGES_SUCCESS = "LOAD_CHAT_MESSAGES_SUCCESS";
 
 export function loadChatMessages(chatID) {
-    return dispatch => fetch(`/chats/${chatID}/messages`)
+    return dispatch => fetch(`${api}/chats/${chatID}/messages`)
         .then(response => response.json())
         .then(response => dispatch(loadChatMessagesSuccess(response)))
         .catch(error => console.log(error))
@@ -58,14 +60,14 @@ export function openChat(chatID, contactID) {
 }
 
 export function loadUserChats(userID) {
-    return dispatch => fetch(`/users/${userID}/chats`)
+    return dispatch => fetch(`${api}/users/${userID}/chats`)
         .then(response => response.json())
         .then(chat => dispatch(loadChatsSuccess))
 }
 
 
 export function createChat(userID, contactID) {
-    return dispatch => fetch(`/chats?users[]=${userID}&users[]=${contactID}`, {
+    return dispatch => fetch(`${api}/chats?users[]=${userID}&users[]=${contactID}`, {
         method: 'post',
         body: JSON.stringify({
             users: [userID, contactID]

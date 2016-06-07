@@ -35,10 +35,15 @@ export default class CalendarList extends React.Component{
             minute: 'numeric'
         };
 
+        console.log('events', this.props.events);
+
         let events = this.props.events.length != 0 &&
             this.props.events
                 .map(event => {
-                    let date = new Date(event.date.getFullYear(), event.date.getMonth(), event.date.getDay(), event.time.getHours(), event.time.getMinutes(), event.time.getSeconds());
+                    let date = new Date(event.date),
+                        time = new Date(event.time);
+
+                    date = new Date(date.getFullYear(), date.getMonth(), date.getDay(), time.getHours(), time.getMinutes(), time.getSeconds());
                     return (<ListItem  primaryText={
                         `${event.title} ${date.toLocaleString("en-US", options)}`
                     }

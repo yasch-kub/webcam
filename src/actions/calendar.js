@@ -1,3 +1,5 @@
+import api from '../api'
+
 export const OPEN_CLOSE_CALENDAR = "OPEN_CLOSE_CALENDAR";
 
 export function openOrCloseCalendar() {
@@ -7,7 +9,7 @@ export function openOrCloseCalendar() {
 }
 
 export function loadEvents(userID) {
-    return dispatch => fetch(`/users/${userID}/events`)
+    return dispatch => fetch(`${api}/users/${userID}/events`)
         .then(response => response.json())
         .then(events => dispatch(loadEventsSuccess(events)))
         .catch(error => console.log(error));
@@ -25,7 +27,7 @@ export function loadEventsSuccess(events) {
 export const ADD_EVENT_SUCCESS = "ADD_EVENT_SUCCESS";
 
 export function addEvent(userID, event) {
-    return dispatch => fetch(`/users/${userID}/events`, {
+    return dispatch => fetch(`${api}/users/${userID}/events`, {
             method: 'post',
             body: JSON.stringify(event),
             headers: new Headers({

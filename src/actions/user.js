@@ -1,3 +1,5 @@
+import api from '../api'
+
 import { browserHistory } from 'react-router'
 
 export const AUTH_WAITING = 'AUTH_WAITING';
@@ -6,8 +8,9 @@ export const SIGNUP_FAILURE = 'SIGNUP_FAILED';
 
 export function signup(user) {
     return dispatch => {
+        console.log(user)
         dispatch(waiting());
-        fetch(`/users`, {
+        fetch(`${api}/users`, {
             method: 'post',
             body: JSON.stringify(user),
             headers: new Headers({
@@ -24,7 +27,6 @@ export function signup(user) {
                 response => setTimeout(
                     () => {
                         dispatch(signupSuccess(response));
-                        dispatch(loadContactsSuccess(response.contacts));
                         browserHistory.push('/app');
                     }, 2000)
             )
@@ -60,7 +62,7 @@ export function login(email, password) {
     
     return dispatch => {
         dispatch(waiting());
-        fetch(`/users/login`, {
+        fetch(`${api}/users/login`, {
             method: 'post',
             body: JSON.stringify(creditionals),
             headers: new Headers({

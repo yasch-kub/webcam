@@ -72,7 +72,12 @@ export default class Registration extends React.Component {
     }
 
     handleSubmit() {
-        this.props.signup(this.state);
+        this.props.signup({
+            firstname: this.state.firstname.value,
+            lastname: this.state.lastname.value,
+            email: this.state.email.value,
+            password: this.state.password.value
+        });
     }
 
     render() {

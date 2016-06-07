@@ -1,7 +1,9 @@
+import api from '../api'
+
 export const LOAD_CONTACTS_SUCCESS = "LOAD_CONTACTS_SUCCESS";
 
 export function loadContacts(userID) {
-    return dispatch => fetch(`/users/${userID}/contacts`)
+    return dispatch => fetch(`${api}/users/${userID}/contacts`)
         .then(response => response.json())
         .then(contacts => dispatch(loadContactsSuccess(contacts)))
         .catch(error => console.log(error));
@@ -36,7 +38,7 @@ export function loadSearchContacts(searchString) {
     return dispatch => {
         searchString = searchString.trim();
         searchString.length != 0
-            ? fetch(`/users?search=${searchString}`)
+            ? fetch(`${api}/users?search=${searchString}`)
                     .then(response => response.json())
                     .then(contacts => dispatch(loadSearchContactsSuccess(contacts)))
                     .catch(error => dispatch(loadSearchContactsFail(error)))
@@ -50,7 +52,7 @@ export const ADD_CONTACT_WITH_REQUEST_SUCCESS = "ADD_CONTACT_WITH_REQUEST_SUCCES
 
 export function addContact(userId, contactId) {
     return dispatch =>
-        fetch(`/users/${userId}/contacts`, {
+        fetch(`${api}/users/${userId}/contacts`, {
             method: 'post',
             body: JSON.stringify({
                 id: contactId

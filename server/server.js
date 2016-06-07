@@ -38,6 +38,6 @@ app.use('/chats', chatRoutes);
 require('./sockets/user')(io);
 //require('./sockets/chat')(io);
 
-server.listen(app.get('port'), 'localhost', () => {
+server.listen(app.get('port'), () => {
     console.log(`Server run on ${app.get('port')}`);
 });
