@@ -9,6 +9,7 @@
     "body-parser": "^1.15.0",
     "es6-promise": "^3.2.1",
     "express": "^4.13.4",
+    "firebase-tools": "^3.0.2",
     "formsy-material-ui": "^0.4.0",
     "formsy-react": "^0.18.0",
     "material-icons": "^0.1.0",
@@ -17,6 +18,7 @@
     "mongoose-unique-validator": "^1.0.2",
     "mongoose-validators": "^0.1.0",
     "node-uuid": "^1.4.7",
+    "path": "^0.12.7",
     "peerjs": "^0.3.14",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
@@ -52,6 +54,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
+    "build": "webpack src/index.js -o bundle.js",
     "server": "set PORT=3333 && nodemon --harmony-destructuring server/server.js"
   },
   "author": "",

@@ -23,8 +23,6 @@ router.post('/login', (req, res) => {
        password
     } = req.body;
 
-    console.log(email);
-
     async.waterfall([
         callback => {
         console.log('step 1');
